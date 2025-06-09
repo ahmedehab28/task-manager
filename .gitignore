@@ -1,0 +1,56 @@
+# VS Code & Visual Studio
+.vs/
+.idea/
+.vscode/
+
+# .NET builds & user files
+**/bin/
+**/obj/
+*.user
+*.suo
+*.dbmdl
+*.pdb
+*.cache
+appsettings.*.json
+
+# Rider caches
+.idea/
+
+# Ignore any folder named "log" (and its contents)
+**/log/
+
+# Ignore any folder named "logs" (and its contents)
+**/logs/
+
+# NuGet
+packages/
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+
+# EF Core Migrations snapshots
+**/Migrations/*.Designer.cs
+**/Migrations/*.Snapshot.cs
+
+# React / Node (WebUI)
+src/WebUI/node_modules/
+src/WebUI/dist/
+src/WebUI/dist-ssr/
+src/WebUI/.env.local
+src/WebUI/.env.*.local
+
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test results
+TestResults/
+*.trx
+
+# Optional: coverage reports
+coverage/
+
+# Optional: swap files (if your editor produces them)
+*.sw?
