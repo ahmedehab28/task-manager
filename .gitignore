@@ -54,3 +54,5 @@ coverage/
 
 # Optional: swap files (if your editor produces them)
 *.sw?
+
+git-diagnostics-*.zip
