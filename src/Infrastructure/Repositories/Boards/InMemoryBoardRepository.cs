@@ -10,29 +10,37 @@ namespace Infrastructure.Repositories.Boards
 {
     public class InMemoryBoardRepository : IBoardRepository
     {
+        private readonly List<Board> _boards = [];
         public void Add(Board board)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Board> GetAll()
-        {
-            throw new NotImplementedException();
+            if (board != null)
+                _boards.Add(board);
         }
 
         public Board? GetById(Guid id)
         {
-            throw new NotImplementedException();
-        }
+            var board = _boards.FirstOrDefault(x => x.Id == id);
+            return board ?? null;
 
-        public void Update(Board board)
+        }
+        public IEnumerable<Board> GetAll()
         {
-            throw new NotImplementedException();
+            return _boards;
+        }
+        public void Update(Board newBoard)
+        {
+            Board? existing = GetById(newBoard.Id);
+            if (existing != null)
+            {
+                existing.Title = newBoard.Title;
+                existing.Description = newBoard.Description;
+            }
+        }
+        public void Delete(Guid id)
+        {
+            Board? board = GetById(id);
+            if (board != null)
+                _boards.Remove(board);
         }
     }
 }
