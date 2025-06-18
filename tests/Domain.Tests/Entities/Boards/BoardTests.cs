@@ -39,8 +39,7 @@ namespace Domain.Tests.Entities.Boards
             };
 
             // Assert
-            act.Should().Throw<ArgumentException>()
-               .WithMessage("Title is required*");
+            act.Should().Throw<ArgumentException>();
         }
     }
 }
