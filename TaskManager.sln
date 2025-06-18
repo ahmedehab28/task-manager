@@ -19,9 +19,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Tests", "tests\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "src\WebApi\WebApi.csproj", "{2A0FBB1A-8B21-46B4-90A8-4637510960D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Tests", "Domain.Tests\Domain.Tests.csproj", "{8ADC43C3-A607-427C-848E-44A8443E71C3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Tests", "tests\Domain.Tests\Domain.Tests.csproj", "{8ADC43C3-A607-427C-848E-44A8443E71C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Tests", "Infrastructure.Tests\Infrastructure.Tests.csproj", "{A57970F0-7537-4E1C-834C-DA78A0544F65}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Tests", "tests\Infrastructure.Tests\Infrastructure.Tests.csproj", "{A57970F0-7537-4E1C-834C-DA78A0544F65}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
