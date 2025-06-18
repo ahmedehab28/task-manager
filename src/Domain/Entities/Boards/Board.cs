@@ -17,7 +17,6 @@ namespace Domain.Entities.Boards
         {
             if (string.IsNullOrWhiteSpace(title))
                 throw new ArgumentException("Title is required");
-            Id = Guid.NewGuid();
             Title = title;
             Description = description;
         }
