@@ -13,8 +13,10 @@ namespace Infrastructure.Repositories.Boards
         private readonly List<Board> _boards = [];
         public void Add(Board board)
         {
-            if (board != null)
-                _boards.Add(board);
+            if (board is null)
+                throw new ArgumentNullException(nameof(board));
+
+            _boards.Add(board);
         }
 
         public Board? GetById(Guid id)
