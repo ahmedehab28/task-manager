@@ -8,6 +8,6 @@ namespace Domain.Entities.Common
 {
     public abstract class BaseEntity
     {
-        public required Guid Id { get; set; }
+        public required Guid Id { get; init;  } = Guid.NewGuid();
     }
 }
