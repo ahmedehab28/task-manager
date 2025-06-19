@@ -13,9 +13,7 @@ namespace Infrastructure.Repositories.Boards
         private readonly List<Board> _boards = [];
         public void Add(Board board)
         {
-            if (board is null)
-                throw new ArgumentNullException(nameof(board));
-
+            ArgumentNullException.ThrowIfNull(board);
             _boards.Add(board);
         }
 
@@ -34,8 +32,8 @@ namespace Infrastructure.Repositories.Boards
             Board? existing = GetById(newBoard.Id);
             if (existing != null)
             {
-                existing.Title = newBoard.Title;
-                existing.Description = newBoard.Description;
+                existing.UpdateTitle(newBoard.Title);
+                existing.UpdateDescription(newBoard.Description!);
             }
         }
         public void Delete(Guid id)
