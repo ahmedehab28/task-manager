@@ -9,8 +9,8 @@ namespace Domain.Entities.Boards
 {
     public sealed class Board : BaseEntity
     {
-        public string Title { get; set; }
-        public string? Description { get; set; }
+        public string Title { get; private set; }
+        public string? Description { get; private set; }
         public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
 
         public Board(string title, string? description = null)
