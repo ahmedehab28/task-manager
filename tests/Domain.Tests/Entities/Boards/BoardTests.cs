@@ -41,5 +41,54 @@ namespace Domain.Tests.Entities.Boards
             // Assert
             act.Should().Throw<ArgumentException>();
         }
+
+        [Fact]
+        public void UpdateTitle_WithValidTitle_ShouldUpdateBoardTitle()
+        {
+            // Arrange
+            Board board = new("Old Board Title");
+            string updatedTitle = "New Updated Board Title";
+
+            // Act
+            board.UpdateTitle(updatedTitle);
+
+            // Assertion
+            board.Title.Should().Be(updatedTitle);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("  ")]
+        public void UpdateTitle_WithInvalidTitle_ShouldThrow(string? invalidTitle)
+        {
+            // Arrange
+            var board = new Board("Initial Title");
+
+            // Act
+            Action act = () => board.UpdateTitle(invalidTitle!);
+
+            // Assertion
+            act.Should().Throw<ArgumentException>().WithMessage("Title is required*");
+        }
+
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("New description")]
+        public void UpdateDescription_WithValidInputs_ShouldUpdateDescription(string? newDescription)
+        {
+            // Arrange
+            var board = new Board("My Board Title", "Initial");
+
+            // Act
+            board.UpdateDescription(newDescription!);
+
+            // Assertion
+            board.Description.Should().Be(newDescription);
+        }
+
     }
 }
