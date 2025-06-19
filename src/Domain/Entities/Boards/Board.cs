@@ -15,11 +15,26 @@ namespace Domain.Entities.Boards
 
         public Board(string title, string? description = null)
         {
-            if (string.IsNullOrWhiteSpace(title))
-                throw new ArgumentException("Title is required");
+            ValidateTitle(title);
             Title = title;
             Description = description;
         }
 
+        public void UpdateTitle(string newTitle)
+        {
+            ValidateTitle(newTitle);
+            Title = newTitle;
+        }
+
+        public void UpdateDescription (string newDescription)
+        {
+            Description = newDescription;
+        }
+
+        public static void ValidateTitle(string boardTitle)
+        {
+            if (string.IsNullOrWhiteSpace(boardTitle))
+                throw new ArgumentException("Title is required");
+        }
     }
 }
