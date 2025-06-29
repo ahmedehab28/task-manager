@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Application.Boards.Commands.CreateBoard;
 using Asp.Versioning;
 using Application.Boards.DTOs;
+using Application.Boards.Queries.GetAllBoards;
 
 [ApiController]
 [ApiVersion("1")]
@@ -18,6 +19,14 @@ public class BoardsController : ControllerBase
         var cmd = new CreateBoardCommand(request.Title, request.Description);
         var id = await _mediator.Send(cmd);
         return CreatedAtAction(nameof(Create), new { id }, new { id });
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var cmd = new GetAllBoardsQuery();
+        var boards = await _mediator.Send(cmd);
+        return Ok(boards);
     }
 
 }
