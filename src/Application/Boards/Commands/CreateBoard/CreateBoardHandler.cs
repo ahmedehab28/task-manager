@@ -15,7 +15,7 @@ namespace Application.Boards.Commands.CreateBoard
         {
             var board = new Board(request.Title, request.Description);
 
-            _repository.Add(board);
+            await _repository.AddAsync(board);
             await Task.CompletedTask;   // Placeholder for later async methods
 
             return board.Id;
