@@ -1,44 +1,40 @@
 ﻿using Application.Interfaces;
 using Domain.Entities.Boards;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories.Boards
 {
     public class InMemoryBoardRepository : IBoardRepository
     {
         private readonly List<Board> _boards = [];
-        public void Add(Board board)
+        public Task AddAsync(Board board)
         {
             ArgumentNullException.ThrowIfNull(board);
             _boards.Add(board);
+            return Task.CompletedTask;
         }
 
-        public Board? GetById(Guid id)
+        public Task<Board?> GetByIdAsync(Guid id)
         {
             var board = _boards.FirstOrDefault(x => x.Id == id);
-            return board ?? null;
+            return Task.FromResult(board ?? null);
 
         }
-        public IEnumerable<Board> GetAll()
+        public Task<IEnumerable<Board>> GetAllAsync()
         {
-            return _boards;
+            return Task.FromResult<IEnumerable<Board>>(_boards);
         }
-        public void Update(Board newBoard)
+        public async Task UpdateAsync(Board newBoard)
         {
-            Board? existing = GetById(newBoard.Id);
+            Board? existing = await GetByIdAsync(newBoard.Id);
             if (existing != null)
             {
                 existing.UpdateTitle(newBoard.Title);
                 existing.UpdateDescription(newBoard.Description!);
             }
         }
-        public void Delete(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            Board? board = GetById(id);
+            Board? board = await GetByIdAsync(id);
             if (board != null)
                 _boards.Remove(board);
         }

@@ -8,7 +8,7 @@ namespace Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
-            services.AddScoped<IBoardRepository, InMemoryBoardRepository>();
+            services.AddSingleton<IBoardRepository, InMemoryBoardRepository>();
             return services;
         }
     }
