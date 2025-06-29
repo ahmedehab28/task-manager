@@ -10,10 +10,10 @@ namespace Application.Interfaces
 {
     public interface IBoardRepository
     {
-        public void Add(Board board);
-        public Board? GetById(Guid id);
-        public IEnumerable<Board> GetAll();
-        public void Update (Board board);
-        public void Delete(Guid id);
+        Task AddAsync(Board board);
+        Task<Board?> GetByIdAsync(Guid id);
+        Task<IEnumerable<Board>> GetAllAsync();
+        Task UpdateAsync(Board board);
+        Task DeleteAsync(Guid id);
     }
 }
