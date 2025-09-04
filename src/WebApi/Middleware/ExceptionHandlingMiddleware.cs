@@ -1,4 +1,6 @@
-﻿using FluentValidation;
+﻿using Application.Common.Exceptions;
+using Domain.Entities.Common;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System.Net;
@@ -30,6 +32,30 @@ namespace WebApi.Middleware
                 };
                 ctx.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 ctx.Response.ContentType = "application/problem+json";
+                await ctx.Response.WriteAsJsonAsync(pd);
+            }
+            catch (NotFoundException nex)
+            {
+                Log.Error(nex, nex.Message);           // Serilog
+                ctx.Response.StatusCode = 404;
+                ctx.Response.ContentType = "application/problem+json";
+                var pd = new ProblemDetails
+                {
+                    Title = nex.Message,
+                    Status = 404,
+                };
+                await ctx.Response.WriteAsJsonAsync(pd);
+            }
+            catch (DomainException dex)
+            {
+                Log.Error(dex, dex.Message);           // Serilog
+                ctx.Response.StatusCode = dex.StatusCode;
+                ctx.Response.ContentType = "application/problem+json";
+                var pd = new ProblemDetails
+                {
+                    Title = dex.Message,
+                    Status = dex.StatusCode,
+                };
                 await ctx.Response.WriteAsJsonAsync(pd);
             }
             catch (Exception ex)

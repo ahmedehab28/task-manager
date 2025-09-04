@@ -1,5 +1,5 @@
-﻿using Application.Interfaces;
-using Domain.Entities.Boards;
+﻿using Application.Common.Interfaces;
+using Domain.Entities;
 
 namespace Infrastructure.Repositories.Boards
 {
@@ -28,8 +28,8 @@ namespace Infrastructure.Repositories.Boards
             Board? existing = await GetByIdAsync(newBoard.Id);
             if (existing != null)
             {
-                existing.UpdateTitle(newBoard.Title);
-                existing.UpdateDescription(newBoard.Description!);
+                existing.Title = newBoard.Title;
+                existing.Description = newBoard.Description;
             }
         }
         public async Task DeleteAsync(Guid id)

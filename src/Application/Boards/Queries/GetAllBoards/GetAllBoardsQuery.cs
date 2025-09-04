@@ -3,5 +3,6 @@ using MediatR;
 
 namespace Application.Boards.Queries.GetAllBoards
 {
-    public record GetAllBoardsQuery : IRequest<List<BoardDto>>;
+    public record GetAllBoardsQuery(
+        Guid ProjectId) : IRequest<IEnumerable<BoardDto>>;
 }

@@ -3,5 +3,8 @@
 
 namespace Application.Boards.Commands.CreateBoard
 {
-    public sealed record CreateBoardCommand (string Title, string? Description) : IRequest<Guid>;
+    public sealed record CreateBoardCommand (
+        Guid ProjectId,
+        string Title, 
+        string? Description) : IRequest<Guid>;
 }

@@ -1,0 +1,16 @@
+.layOutContainer {
+    display: flex;
+    flex-direction: column;
+
+    min-height: 100vh;
+    color:blue;
+}
+
+.layout {
+  display: flex;
+  grid-template-columns: var(--left-w) 1fr var(--right-w);
+  grid-template-areas: "left main right";
+  gap: 1rem;
+
+}
+

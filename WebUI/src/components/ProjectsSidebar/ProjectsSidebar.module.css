@@ -1,0 +1,165 @@
+.sidebarLeft {
+    font-family: "Poppins", sans-serif;
+
+    position: sticky;
+    top: 48px;
+
+    display: flex;
+    flex-direction: column;
+
+    width: 270px;
+    height: calc(100vh - 48px);
+    
+    padding: 2rem 1rem 1rem 2rem;
+    background-color: #ffffff;
+  
+}
+
+.sidebarLeft hr {
+  height: 1px;
+  border: none;
+  background-color: #666666;  /* light grey line */
+
+  margin: 10px 0px;
+}
+
+.mainNav {
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+.mainNav img {
+    width: 20px;
+}
+
+.mainNav a {
+    font-size: 14px;
+    font-weight: 500;
+    color: #172b4d;
+
+    padding: 7px;
+    border-radius: 8px;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    transition: 0.2s;
+}
+
+.mainNav a:hover {
+    background-color: #e5ebf0;
+
+}
+
+.activeMainNav {
+    background-color: #e6f4f6;
+}
+
+.projectsNav {
+
+    flex: 1;
+    overflow-y: auto;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+    margin-top: 15px;
+    
+}
+
+.projectsNav span {
+    margin-left: 7px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #172b4d;
+
+}
+
+.projectsNav ul {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 0;
+    margin: 0;
+}
+.projectsNav li {
+    list-style: none;
+    margin: 0;
+
+    transition: 0.2s;
+    cursor: pointer;
+
+}
+
+.projectHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    padding: 7px;
+    border-radius: 8px;
+
+}
+
+
+.projectHeader a {
+    color: #08101f;
+    
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.projectHeader:hover {
+    background-color: rgb(229, 235, 240);
+}
+
+.projectHeader img {
+    width: 12px;
+    transition: 0.4s;
+}
+
+.arrowUp {
+    transform: rotate(-180deg);
+}
+
+.subList {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.4s ease, opacity 0.4s ease;
+}
+.subListOpen {
+    max-height: 110px;
+    opacity: 1;
+}
+
+.subListHeader{
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+    padding: 6px 6px 6px 26px;
+
+    border-radius: 8px;
+}
+
+.subListHeader a {
+    color: #172b4d;
+
+    font-size: 14px;
+    font-weight: 300;
+
+}
+
+.subListHeader img {
+    width: 20px;
+}
+
+.subListHeader:hover {
+    background-color: rgb(229, 235, 240);
+}
+

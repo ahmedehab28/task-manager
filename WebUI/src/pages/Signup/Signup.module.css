@@ -1,0 +1,170 @@
+.mainContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: linear-gradient(45deg, #116d79 0%, #57afba 100%);
+
+
+    min-height: 100vh;
+}
+
+.signupForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    flex: 1;
+
+    background-color: #FFFF;
+    
+    border-radius: 24px;
+
+    max-width: 750px;
+    min-height: 680px;
+    
+}
+
+
+.content {
+    display: flex;
+    flex-direction: column;
+
+    text-align: center;
+    
+
+    gap: 10px;
+    
+    max-width: 70%;
+    
+}
+
+.title {
+    font-family: poppins;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+
+.content label {
+    color: #666666;
+    font-family: 'Poppins';
+}
+
+.names div {
+    flex: 1;
+}
+.names {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.content input {
+    width: 100%;
+
+    font-size: 1rem;
+    padding: 0px 15px;
+
+    border-radius: 12px;
+    border: 1px solid #ddd;
+
+    background-color: #fafafa; 
+    
+    height: 38px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.content input:hover {
+    border-color: #9d9d9d;
+}
+
+.content input:focus {
+    outline: none;                  
+    border-color: #075762;
+    box-shadow: 0 0 0 3px rgba(7, 87, 98, 0.15);
+}
+
+.signupButton {
+    background-color: #154a52;
+    color: white;
+
+    font-size: 18px;
+    font-family: poppins;
+    padding: 8px;
+
+    border: none;
+    border-radius: 40px;
+    margin-top: 4px;
+
+    transition: 0.2s;
+}
+
+.signupButton:hover {
+    background-color: #1f7583;
+    cursor: pointer;
+}
+
+.signupButton:active {
+    scale: 0.99;
+}
+
+.orContainer {
+    display: flex;
+    align-items: center;
+
+    margin-top: 10px;
+}
+
+.orContainer hr {
+  flex: 1;                 /* take up all available space */
+  height: 1px;             /* override default hr height */
+  border: none;            /* remove browser’s inset border */
+  background-color: #666666;  /* light grey line */
+
+  margin: 10px;
+}
+
+.orContainer span {
+    color: 666666;
+}
+
+.externalLogin {
+    margin-top: 15px;
+    display: flex;
+    gap: 16px;
+}
+
+.externalLoginButton {
+    font-size: 16px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 40px;
+    border: 1px solid #333333;
+    background-color: white;
+
+    padding: 10px;
+    gap: 16px;
+    width: 100%;
+
+    transition: 0.2s;
+}
+
+.externalLoginButton:hover {
+    scale: 1.02;
+    cursor: pointer;
+}
+
+.externalLoginButton:active {
+    scale: 0.98;
+}
+
+
+
+.facebookLogo {
+    color: #1877f2;
+}
