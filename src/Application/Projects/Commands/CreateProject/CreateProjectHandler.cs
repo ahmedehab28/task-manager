@@ -1,12 +1,13 @@
 ﻿
 using Application.Common.Interfaces;
+using Application.Projects.DTOs;
 using Domain.Entities;
 using Domain.Enums;
 using MediatR;
 
 namespace Application.Projects.Commands.CreateProject
 {
-    internal class CreateProjectHandler : IRequestHandler<CreateProjectCommand, Guid>
+    internal class CreateProjectHandler : IRequestHandler<CreateProjectCommand, ProjectDto>
     {
         private readonly IApplicationDbContext _context;
         private readonly ICurrentUser _currentUser;
@@ -17,7 +18,7 @@ namespace Application.Projects.Commands.CreateProject
             _context = applicationDbContext;
             _currentUser = currentUser;
         }
-        public async Task<Guid> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
+        public async Task<ProjectDto> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
         {
             var userId = _currentUser.Id;
             var newProject = Project.CreateWithDefaultInbox(request.Title, request.Description, userId);
@@ -25,7 +26,10 @@ namespace Application.Projects.Commands.CreateProject
             _context.Projects.Add(newProject);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return newProject.Id;
+            return new ProjectDto(
+                newProject.Id,
+                newProject.Title,
+                newProject.Description);
         }
     }
 }

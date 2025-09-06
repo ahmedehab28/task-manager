@@ -3,7 +3,6 @@ using Application.Auth.Commands.Register;
 using Application.Auth.DTOs;
 using Asp.Versioning;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -11,9 +10,7 @@ namespace WebApi.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [Route("/api/v{version:apiVersion}/[controller]")]
-
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     [Produces("application/json")]
     public class AuthController : Controller
     {
@@ -23,15 +20,18 @@ namespace WebApi.Controllers
             _mediator = mediator;
         }
         [HttpPost("login")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(LoginResponseDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> Login([FromBody] LoginDto request)
         {
             var result = await _mediator.Send(new LoginCommand(request.Email, request.Password));
             if (!result.Succeeded)
-                return BadRequest(result.Errors);
+                return Unauthorized(result.Errors);
             return Ok(new LoginResponseDto(result.Value!.Token));
         }
 
         [HttpPost("register")]
+        [ProducesResponseType(typeof(RegisterResponseDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> Register([FromBody] RegisterDto request)
         {
             var result = await _mediator.Send(new RegisterCommand(

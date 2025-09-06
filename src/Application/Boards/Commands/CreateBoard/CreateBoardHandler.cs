@@ -1,4 +1,5 @@
-﻿using Application.Common.Enums;
+﻿using Application.Boards.DTOs;
+using Application.Common.Enums;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authorization;
@@ -8,7 +9,7 @@ using MediatR;
 
 namespace Application.Boards.Commands.CreateBoard
 {
-    public class CreateBoardHandler : IRequestHandler<CreateBoardCommand, Guid>
+    public class CreateBoardHandler : IRequestHandler<CreateBoardCommand, BoardDetailsDto>
     {
         private readonly IApplicationDbContext _context;
         private readonly ICurrentUser _currentUser;
@@ -22,7 +23,7 @@ namespace Application.Boards.Commands.CreateBoard
             _currentUser = currentUser;
             _authService = authService;
         }
-        public async Task<Guid> Handle(CreateBoardCommand request, CancellationToken cancellationToken)
+        public async Task<BoardDetailsDto> Handle(CreateBoardCommand request, CancellationToken cancellationToken)
         {
             var userId = _currentUser.Id;
             if (!(await _authService.CanAccessProject(EntityOperations.AddToParent, request.ProjectId, userId, cancellationToken)))
@@ -38,7 +39,11 @@ namespace Application.Boards.Commands.CreateBoard
 
             await _context.Boards.AddAsync(board, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
-            return board.Id;
+            return new BoardDetailsDto(
+                board.Id,
+                board.ProjectId,
+                board.Title,
+                board.Description);
         }
     }
 }

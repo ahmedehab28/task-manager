@@ -16,6 +16,8 @@ namespace WebApi.Controllers
     [Route("/api/{version:apiVersion}/[controller]")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     [Produces("application/json")]
     public class ListController : Controller
     {
@@ -25,10 +27,7 @@ namespace WebApi.Controllers
             _mediator = mediatior;
         }
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-
+        [ProducesResponseType(typeof(ListDto), StatusCodes.Status201Created)]
         public async Task<IActionResult> Create([FromBody] CreateListRequest request)
         {
             var list = await _mediator.Send(new CreateListCommand(request.BoardId, request.Title, request.Position));
@@ -37,9 +36,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{listId:guid}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ListDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetListById([FromRoute] Guid listId)
         {
             var list = await _mediator.Send(new GetListByIdQuery(listId));
@@ -47,9 +44,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPut("{listId:guid}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ListDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> UpdateList([FromRoute] Guid listId, [FromBody] UpdateListRequest request)
         {
             var list = await _mediator.Send(new UpdateListCommand(listId, request.BoardId, request.Title, request.Position));
@@ -58,8 +53,6 @@ namespace WebApi.Controllers
 
         [HttpDelete("{listId:guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteList([FromRoute] Guid listId)
         {
             await _mediator.Send(new DeleteListCommand(listId));
