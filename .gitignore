@@ -56,3 +56,6 @@ coverage/
 *.sw?
 
 git-diagnostics-*.zip
+
+
+docker-compose.yml
