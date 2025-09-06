@@ -2,7 +2,5 @@
 {
     public record BoardDto (
         Guid Id,
-        string Title,
-        string? Description,
-        DateTime CreatedAt);
+        IList<BoardListsDto> Lists);
 }

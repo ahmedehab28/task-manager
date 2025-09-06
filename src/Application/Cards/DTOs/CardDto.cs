@@ -1,12 +1,11 @@
-﻿
-namespace Application.Cards.DTOs
+﻿namespace Application.Cards.DTOs
 {
     public record CardDto(
         Guid Id,
-        Guid BoardId,
-        Guid? ListId,
+        Guid ListId,
         string Title,
         string? Description,
+        DateTime? DueAt,
         decimal Position,
-        DateTime? DueAt);
+        IList<CardMemberDto> CardMembers);
 }

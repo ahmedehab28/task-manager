@@ -1,7 +1,6 @@
 ﻿namespace Application.Cards.DTOs
 {
     public record MoveCardRequest(
-        Guid? PrevCardId,
-        Guid? NextCardId,
-        Guid? TargetListId);
+        Guid ListId,
+        decimal Position);
 }

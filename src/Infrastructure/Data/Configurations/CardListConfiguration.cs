@@ -12,13 +12,14 @@ namespace Infrastructure.Data.Configurations
                 .IsRequired()
                 .HasMaxLength(50);
 
-            builder.Property(l => l.Position)
-                .IsRequired()
-                .HasPrecision(7, 4);
+            builder.Property(c => c.Position)
+               .IsRequired()
+               .HasPrecision(18, 4);
 
-            builder.HasOne(l => l.Board)
-                .WithMany(b => b.Lists)
-                .HasForeignKey(l => l.BoardId)
+
+            builder.HasOne(cl => cl.Board)
+                .WithMany(b => b.CardLists)
+                .HasForeignKey(cl => cl.BoardId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

@@ -28,6 +28,9 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("BoardType")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -35,7 +38,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
@@ -64,7 +68,7 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("BoardId")
+                    b.Property<Guid>("CardListId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
@@ -74,7 +78,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
 
                     b.Property<DateTime?>("DueAt")
                         .HasColumnType("datetime2");
@@ -85,12 +90,9 @@ namespace Infrastructure.Migrations
                     b.Property<Guid?>("LastModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ListId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<decimal>("Position")
-                        .HasPrecision(7, 4)
-                        .HasColumnType("decimal(7,4)");
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -99,9 +101,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BoardId");
-
-                    b.HasIndex("ListId");
+                    b.HasIndex("CardListId");
 
                     b.ToTable("Cards");
                 });
@@ -128,8 +128,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Position")
-                        .HasPrecision(7, 4)
-                        .HasColumnType("decimal(7,4)");
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -178,7 +178,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
@@ -459,26 +460,19 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Card", b =>
                 {
-                    b.HasOne("Domain.Entities.Board", "Board")
+                    b.HasOne("Domain.Entities.CardList", "CardList")
                         .WithMany("Cards")
-                        .HasForeignKey("BoardId")
+                        .HasForeignKey("CardListId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.CardList", "List")
-                        .WithMany("Cards")
-                        .HasForeignKey("ListId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Board");
-
-                    b.Navigation("List");
+                    b.Navigation("CardList");
                 });
 
             modelBuilder.Entity("Domain.Entities.CardList", b =>
                 {
                     b.HasOne("Domain.Entities.Board", "Board")
-                        .WithMany("Lists")
+                        .WithMany("CardLists")
                         .HasForeignKey("BoardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -573,9 +567,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Board", b =>
                 {
-                    b.Navigation("Cards");
-
-                    b.Navigation("Lists");
+                    b.Navigation("CardLists");
                 });
 
             modelBuilder.Entity("Domain.Entities.Card", b =>

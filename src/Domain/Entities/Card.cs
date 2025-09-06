@@ -8,10 +8,9 @@ namespace Domain.Entities
         public string? Description { get; set; }
         public decimal Position { get; set; }
         public DateTime? DueAt { get; set; }
-        public Guid BoardId { get; set; }    // FK to parent board (incase of null list)
-        public Board Board { get; private set; }    // Nav
-        public Guid? ListId { get; set; }    // FK to parent list (nullable for inbox cards)
-        public CardList? List { get; private set; }    // Nav
-        public IList<CardMember> Members { get; private set; } = new List<CardMember>();
+        public Guid CardListId { get; set; }
+
+        public CardList CardList { get; private set; } = null!;
+        public IList<CardMember> Members { get; private set; } = [];
     }
 }

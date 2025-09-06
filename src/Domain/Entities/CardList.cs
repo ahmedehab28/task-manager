@@ -6,8 +6,10 @@ namespace Domain.Entities
     {
         public string Title { get; set; } = string.Empty;
         public decimal Position { get; set; }
+
         public Guid BoardId { get; set; }
-        public Board Board { get; set; }
-        public IList<Card> Cards { get; set; } = new List<Card>();
+
+        public Board Board { get; private set; } = null!;
+        public IList<Card> Cards { get; private set; } = [];
     }
 }

@@ -1,7 +1,7 @@
 ﻿
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authorization;
-using Domain.Entities.Common.Enums;
+using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services.Authorization
@@ -31,14 +31,5 @@ namespace Infrastructure.Services.Authorization
                     pm.UserId == userId && 
                     (pm.Role == ProjectRole.Admin || pm.Role == ProjectRole.Owner), cancellationToken);
         }
-
-        public async Task<bool> IsProjectMemberAsync(Guid projectId, Guid userId, CancellationToken cancellation)
-        {
-            return await _context.ProjectMembers
-                .AnyAsync(
-                    pm => pm.ProjectId == projectId && 
-                    pm.UserId == userId, cancellation);
-        }
-
     }
 }

@@ -1,11 +1,8 @@
-﻿using Application.Cards.Services;
-using Application.Common.Interfaces;
+﻿using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authorization;
-using Application.List.Services;
 using Infrastructure.Data;
 using Infrastructure.Identity;
 using Infrastructure.Repositories.Boards;
-using Infrastructure.Services;
 using Infrastructure.Services.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -56,13 +53,12 @@ namespace Infrastructure
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddSingleton<ITokenGenerator, TokenGenerator>();
 
+            services.AddScoped<IAppAuthorizationService, AppAuthorizationService>();
             services.AddScoped<IProjectAuthorizationService, ProjectAuthorizationService>();
             services.AddScoped<IBoardAuthorizationService, BoardAuthorizationService>();
             services.AddScoped<ICardAuthorizationService, CardAuthorizationService>();
 
-            services.AddScoped<ICardPositionService, CardPositionService>();
-            services.AddScoped<IListPositionService, ListPositionService>();
-
+            services.AddScoped<IUserService, UserService>();
             return services;
         }
     }

@@ -1,6 +1,4 @@
-﻿
-
-namespace Domain.Entities.Common.Enums
+﻿namespace Domain.Enums
 {
     public enum ProjectRole
     {

@@ -1,4 +1,5 @@
-﻿using Application.Common.Exceptions;
+﻿using Application.Common.Enums;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authorization;
 using MediatR;
@@ -9,11 +10,11 @@ namespace Application.List.Commands.DeleteList
     {
         private readonly IApplicationDbContext _context;
         private readonly ICurrentUser _currentUser;
-        private readonly IBoardAuthorizationService _authService;
+        private readonly IAppAuthorizationService _authService;
         public DeleteListHandler(
             IApplicationDbContext context,
             ICurrentUser currentUser,
-            IBoardAuthorizationService authService)
+            IAppAuthorizationService authService)
         {
             _context = context;
             _currentUser = currentUser;
@@ -22,8 +23,12 @@ namespace Application.List.Commands.DeleteList
         public async Task Handle(DeleteListCommand request, CancellationToken cancellationToken)
         {
             var userId = _currentUser.Id;
-            if (!await (_authService.CanAccessBoardAsync(request.ProjectId, request.BoardId, userId, cancellationToken)))
-                throw new NotFoundException("You are not authorized or project/board is not found.");
+            if (!await (_authService.CanAccessListAsync(EntityOperations.Delete, request.ListId, userId, cancellationToken)))
+                throw new NotFoundException("You are not authorized or list is not found.");
+
+            var list = (await _context.CardLists.FindAsync(new object[] { request.ListId }, cancellationToken))!;
+            _context.CardLists.Remove(list);
+            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }

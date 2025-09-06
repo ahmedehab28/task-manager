@@ -1,5 +1,4 @@
-﻿
-using Domain.Entities.Common.Enums;
+﻿using Domain.Enums;
 
 namespace Domain.Entities
 {
@@ -8,8 +7,9 @@ namespace Domain.Entities
         public Guid ProjectId { get; set; }
         public Guid UserId { get; set; }
         public ProjectRole Role { get; set; }
-        public Project Project { get; set; } // nav
         public DateTime JoinedAt { get; set; } = DateTime.UtcNow;
+
+        public Project Project { get; private set; } = null!;
 
     }
 }

@@ -1,4 +1,4 @@
-﻿using Application.Cards.Services;
+﻿using Application.Common.Enums;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authorization;
 using MediatR;
@@ -9,12 +9,12 @@ namespace Application.Cards.Commands.DeleteCard
     {
         private readonly IApplicationDbContext _context;
         private readonly ICurrentUser _currentUser;
-        private readonly ICardAuthorizationService _authService;
+        private readonly IAppAuthorizationService _authService;
 
         public DeleteCardHandler(
             IApplicationDbContext context,
             ICurrentUser currentUser,
-            ICardAuthorizationService authService)
+            IAppAuthorizationService authService)
         {
             _context = context;
             _currentUser = currentUser;
@@ -24,7 +24,7 @@ namespace Application.Cards.Commands.DeleteCard
         public async Task Handle(DeleteCardCommand request, CancellationToken cancellationToken)
         {
             var userId = _currentUser.Id;
-            if (!(await _authService.CanAccessCardAsync(request.ProjectId, request.BoardId, null, request.CardId, userId, cancellationToken)))
+            if (!(await _authService.CanAccessCardAsync(EntityOperations.Delete, request.CardId, userId, cancellationToken)))
                 throw new KeyNotFoundException("You are not authorized or project/board/card is not found.");
 
             var card = await _context.Cards.FindAsync(new object?[] { request.CardId }, cancellationToken);

@@ -1,16 +1,16 @@
 ﻿using Domain.Entities.Common;
+using Domain.Enums;
 
 namespace Domain.Entities
 {
     public sealed class Board : BaseAuditableEntity
     {
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
         public string? Description { get; set; }
+        public BoardType BoardType { get; set; }
+        public Guid ProjectId { get; set; }
 
-        public IList<Card> Cards { get; set; } = [];
-        public IList<CardList> Lists { get; set; } = [];
-        public Guid ProjectId { get; set; } // FK to projects table
-        public Project Project { get; set; } // Nav so we can access roperties in a Project
-
+        public Project Project { get; private set; } = null!;
+        public IList<CardList> CardLists { get; private set; } = [];
     }
 }

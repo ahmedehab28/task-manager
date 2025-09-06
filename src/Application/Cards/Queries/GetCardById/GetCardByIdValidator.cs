@@ -4,7 +4,7 @@ namespace Application.Cards.Queries.GetCardById
 {
     public class GetCardByIdValidator : AbstractValidator<GetCardByIdQuery>
     {
-        public GetCardByIdValidator()
+        public GetCardByIdValidator() 
         {
             RuleFor(x => x.CardId)
                 .NotEmpty().WithMessage("CardId is required.");

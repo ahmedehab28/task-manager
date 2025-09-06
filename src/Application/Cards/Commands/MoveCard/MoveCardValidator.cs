@@ -6,18 +6,14 @@ namespace Application.Cards.Commands.MoveCard
     {
         public MoveCardValidator()
         {
-            RuleFor(x => x.ProjectId)
-                .NotEmpty().WithMessage("ProjectId is required.");
-            RuleFor(x => x.BoardId)
-                .NotEmpty().WithMessage("BoardId is required.");
-            RuleFor(x => x.CardId)
+            RuleFor(x => x.Id)
                 .NotEmpty().WithMessage("CardId is required.");
-            RuleFor(x => x.PrevCardId)
-                .NotEqual(x => x.CardId).WithMessage("PrevCardId cannot be the same as CardId.");
-            RuleFor(x => x.NextCardId)
-                .NotEqual(x => x.CardId).WithMessage("NextCardId cannot be the same as CardId.");
-            RuleFor(x => x.PrevCardId)
-                .NotEqual(x => x.NextCardId).WithMessage("PrevCardId cannot be the same as NextCardId.");
+            RuleFor(x => x.ListId)
+                .NotEmpty().WithMessage("ListId is required.");
+            RuleFor(cmd => cmd.Position)
+              .GreaterThanOrEqualTo(0m).WithMessage("Position must be zero or positive.")
+              .PrecisionScale(18, 4, false).WithMessage("Position can have up to 4 decimal places and no more than 18 digits total.");
+
         }
     }
 }

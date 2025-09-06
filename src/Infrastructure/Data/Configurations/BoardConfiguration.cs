@@ -13,10 +13,17 @@ namespace Infrastructure.Data.Configurations
                 .IsRequired()
                 .HasMaxLength(50);
 
-            builder.HasMany(b => b.Cards)
-                .WithOne(t => t.Board)
-                .HasForeignKey(t => t.BoardId)
+            builder.Property(b => b.Description)
+                .HasMaxLength(512);
+
+            builder.Property(b => b.BoardType)
+                .IsRequired();
+
+            builder.HasMany(b => b.CardLists)
+                .WithOne(cl => cl.Board)
+                .HasForeignKey(cl => cl.BoardId)
                 .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

@@ -13,55 +13,56 @@ namespace WebApi.Controllers
 {
     [ApiController]
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/projects/{projectId:guid}/boards/{boardId:guid}/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [Produces("application/json")]
-    public class CardsController : Controller
+    public class CardController : Controller
     {
         private readonly IMediator _mediator;
-        public CardsController(
+        public CardController(
             IMediator mediator)
         {
             _mediator = mediator;
         }
         [HttpPost]
-        [ProducesResponseType(typeof(CardDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(CardDetailsDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> CreateCard([FromRoute] Guid projectId, [FromRoute] Guid boardId, [FromBody] CreateCardRequest request)
+        public async Task<IActionResult> CreateCard([FromBody] CreateCardRequest request)
         {
-            var result = await _mediator.Send(new CreateCardCommand(projectId, boardId, request.ListId, request.Title));
-            return CreatedAtAction(nameof(GetCardById), new { projectId, boardId, id = result.Id }, result);
+            var result = await _mediator.Send(new CreateCardCommand(request.ListId, request.Title, request.Position));
+            return CreatedAtAction(nameof(GetCardById), new { cardId = result.Id }, result);
         }
 
 
         [HttpGet("{cardId:guid}")]
-        [ProducesResponseType(typeof(CardDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CardDetailsDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetCardById([FromRoute] Guid projectId, [FromRoute] Guid boardId, [FromRoute] Guid cardId)
+        public async Task<IActionResult> GetCardById([FromRoute] Guid cardId)
         {
-            var card = await _mediator.Send(new GetCardByIdQuery(projectId, boardId, cardId));
+            var card = await _mediator.Send(new GetCardByIdQuery(cardId));
             return Ok(card);
         }
 
         [HttpPut("{cardId:guid}")]
-        [ProducesResponseType(typeof(CardDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CardDetailsDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateCardDetails([FromRoute] Guid projectId, [FromRoute] Guid boardId, [FromRoute] Guid cardId, UpdateCardDetailsRequest request)
+        public async Task<IActionResult> UpdateCardDetails([FromRoute] Guid cardId, UpdateCardDetailsRequest request)
         {
-            var result = await _mediator.Send(new UpdateCardDetailsCommand(projectId, boardId, cardId, request.Title, request.Description, request.DueAt));
+            var result = await _mediator.Send(new UpdateCardDetailsCommand(cardId, request.Title, request.Description, request.DueAt));
             return Ok(result);
         }
 
         [HttpPatch("{cardId:guid}/move")]
-        [ProducesResponseType(typeof(CardDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CardDetailsDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> MoveCard([FromRoute] Guid projectId, [FromRoute] Guid boardId, [FromRoute] Guid cardId, MoveCardRequest request)
+        public async Task<IActionResult> MoveCard([FromRoute] Guid cardId, MoveCardRequest request)
         {
-            var card = await _mediator.Send(new MoveCardCommand(projectId, boardId, request.PrevCardId, request.NextCardId, request.TargetListId, cardId));
+            var card = await _mediator.Send(new MoveCardCommand(cardId, request.ListId, request.Position));
             return Ok(card);
         }
 

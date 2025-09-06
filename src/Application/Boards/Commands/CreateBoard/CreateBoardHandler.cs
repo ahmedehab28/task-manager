@@ -1,7 +1,9 @@
-﻿using Application.Common.Exceptions;
+﻿using Application.Common.Enums;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authorization;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 
 namespace Application.Boards.Commands.CreateBoard
@@ -10,11 +12,11 @@ namespace Application.Boards.Commands.CreateBoard
     {
         private readonly IApplicationDbContext _context;
         private readonly ICurrentUser _currentUser;
-        private readonly IProjectAuthorizationService _authService;
+        private readonly IAppAuthorizationService _authService;
         public CreateBoardHandler(
             IApplicationDbContext applicationDbContext,
             ICurrentUser currentUser,
-            IProjectAuthorizationService authService)
+            IAppAuthorizationService authService)
         {
             _context = applicationDbContext;
             _currentUser = currentUser;
@@ -23,14 +25,15 @@ namespace Application.Boards.Commands.CreateBoard
         public async Task<Guid> Handle(CreateBoardCommand request, CancellationToken cancellationToken)
         {
             var userId = _currentUser.Id;
-            if (!(await _authService.IsProjectMemberAsync(request.ProjectId, userId, cancellationToken)))
+            if (!(await _authService.CanAccessProject(EntityOperations.AddToParent, request.ProjectId, userId, cancellationToken)))
                 throw new NotFoundException("You are not authorized or project is not found.");
 
             var board = new Board
             {
                 Title = request.Title,
                 Description = request.Description,
-                ProjectId = request.ProjectId
+                ProjectId = request.ProjectId,
+                BoardType = BoardType.Normal,
             };
 
             await _context.Boards.AddAsync(board, cancellationToken);

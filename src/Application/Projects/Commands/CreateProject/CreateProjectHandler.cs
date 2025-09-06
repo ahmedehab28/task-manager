@@ -1,7 +1,7 @@
 ﻿
 using Application.Common.Interfaces;
 using Domain.Entities;
-using Domain.Entities.Common.Enums;
+using Domain.Enums;
 using MediatR;
 
 namespace Application.Projects.Commands.CreateProject
@@ -20,21 +20,9 @@ namespace Application.Projects.Commands.CreateProject
         public async Task<Guid> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
         {
             var userId = _currentUser.Id;
-            var newProject = new Project
-            {
-                Title = request.Title,
-                Description = request.Description,
-            };
+            var newProject = Project.CreateWithDefaultInbox(request.Title, request.Description, userId);
 
-            var projectMember = new ProjectMember
-            {
-                ProjectId = newProject.Id,
-                UserId = userId,
-                Role = ProjectRole.Owner
-            };
-
-            await _context.Projects.AddAsync(newProject, cancellationToken);
-            await _context.ProjectMembers.AddAsync(projectMember, cancellationToken);
+            _context.Projects.Add(newProject);
             await _context.SaveChangesAsync(cancellationToken);
 
             return newProject.Id;

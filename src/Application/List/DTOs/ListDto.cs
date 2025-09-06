@@ -1,8 +1,8 @@
 ﻿namespace Application.List.DTOs
 {
     public record ListDto(
+        Guid Id,
         Guid BoardId,
-        Guid ListId,
         string Title,
         decimal Position);
 }

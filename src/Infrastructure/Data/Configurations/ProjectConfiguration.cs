@@ -13,9 +13,12 @@ namespace Infrastructure.Data.Configurations
                 .IsRequired()
                 .HasMaxLength(50);
 
+            builder.Property(p => p.Description)
+                .HasMaxLength(512);
+
             builder.HasMany(p => p.Boards)
-                .WithOne(bd => bd.Project)
-                .HasForeignKey(bd => bd.ProjectId)
+                .WithOne(b => b.Project)
+                .HasForeignKey(b => b.ProjectId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(p => p.Members)

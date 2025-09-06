@@ -4,5 +4,5 @@ using MediatR;
 namespace Application.Boards.Queries.GetAllBoards
 {
     public record GetAllBoardsQuery(
-        Guid ProjectId) : IRequest<IEnumerable<BoardDto>>;
+        Guid ProjectId) : IRequest<IEnumerable<BoardDetailsDto>>;
 }

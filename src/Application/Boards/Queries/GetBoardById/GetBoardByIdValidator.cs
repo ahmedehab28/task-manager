@@ -6,8 +6,6 @@ namespace Application.Boards.Queries.GetBoardById
     {
         public GetBoardByIdValidator()
         {
-            RuleFor(x => x.ProjectId)
-                .NotEmpty().WithMessage("Board Id is required.");
             RuleFor(x => x.BoardId)
                 .NotEmpty().WithMessage("Board Id is required.");
         }

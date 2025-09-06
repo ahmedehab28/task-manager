@@ -13,19 +13,22 @@ namespace Infrastructure.Data.Configurations
                 .IsRequired()
                 .HasMaxLength(50);
 
-            builder.Property(c => c.Position)
-                .IsRequired()
-                .HasPrecision(7, 4);
+            builder.Property(c => c.Description)
+                .HasMaxLength(512);
 
-            builder.HasOne(c=> c.Board)
-                .WithMany(b => b.Cards)
-                .HasForeignKey(c => c.BoardId)
+            builder.Property(c => c.Position)
+               .IsRequired()
+               .HasPrecision(18, 4);
+
+            builder.HasOne(c => c.CardList)
+                .WithMany(l => l.Cards)
+                .HasForeignKey(c => c.CardListId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(c => c.List)
-                .WithMany(l => l.Cards)
-                .HasForeignKey(c => c.ListId)
-                .OnDelete(DeleteBehavior.Restrict);
+            builder.HasMany(c => c.Members)
+                .WithOne(cm => cm.Card)
+                .HasForeignKey(cm => cm.CardId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

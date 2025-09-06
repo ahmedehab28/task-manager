@@ -1,4 +1,6 @@
-﻿using Application.Projects.Commands.CreateProject;
+﻿using Application.Boards.DTOs;
+using Application.Boards.Queries.GetAllBoards;
+using Application.Projects.Commands.CreateProject;
 using Application.Projects.Commands.DeleteProject;
 using Application.Projects.Commands.UpdateProject;
 using Application.Projects.DTOs;
@@ -16,10 +18,10 @@ namespace WebApi.Controllers
     [Authorize]
     [Route("api/v{version:apiversion}/[controller]")]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public class ProjectsController : Controller
+    public class ProjectController : Controller
     {
         private readonly IMediator _mediator;
-        public ProjectsController(IMediator mediator)
+        public ProjectController(IMediator mediator)
         {
             _mediator = mediator;
         }
@@ -69,6 +71,16 @@ namespace WebApi.Controllers
             var cmd = new DeleteProjectCommand(id);
             await _mediator.Send(cmd, ct);
             return NoContent();
+        }
+
+        [HttpGet("{projectId:guid}/boards")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> GetAllProjectBoards([FromRoute] Guid projectId, CancellationToken ct)
+        {
+            var cmd = new GetAllBoardsQuery(projectId);
+            var boards = await _mediator.Send(cmd, ct);
+            return Ok(boards);
         }
 
 

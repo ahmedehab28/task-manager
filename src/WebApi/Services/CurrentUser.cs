@@ -22,6 +22,8 @@ namespace WebApi.Services
             }
         }
 
+        public string Email => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Email)!;
+        public string Name => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name)!;
         public IReadOnlyList<string>? Roles => _httpContextAccessor.HttpContext?.User?.FindAll(ClaimTypes.Role).Select(r => r.Value).ToList();
     }
 }
