@@ -3,9 +3,7 @@ using Application.Common.Interfaces;
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using Infrastructure;
-using Infrastructure.Data;
 using Serilog;
-using System;
 using WebApi.Middleware;
 using WebApi.Services;
 
@@ -77,6 +75,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 
+builder.Services.AddHttpContextAccessor();
 
 // Add the application layers
 builder.Services

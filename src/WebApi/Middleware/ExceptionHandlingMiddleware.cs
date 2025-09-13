@@ -46,6 +46,22 @@ namespace WebApi.Middleware
                 };
                 await ctx.Response.WriteAsJsonAsync(pd);
             }
+            catch (InvalidOperationException ex)
+                when (ex.Message.Contains("No route matches the supplied values"))
+                {
+                    var pd = new ProblemDetails
+                    {
+                        Title = "Resource Not Found",
+                        Status = StatusCodes.Status404NotFound,
+                        Detail = ex.Message,
+                        Instance = ctx.Request.Path
+                    };
+
+                    ctx.Response.StatusCode = pd.Status.Value;
+                    ctx.Response.ContentType = "application/problem+json";
+                    await ctx.Response.WriteAsJsonAsync(pd);
+                    return;
+                }
             catch (DomainException dex)
             {
                 Log.Error(dex, dex.Message);           // Serilog

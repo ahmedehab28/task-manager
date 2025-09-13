@@ -21,7 +21,7 @@ namespace Application.Auth.Commands.Register
                 FirstName: request.FirstName,
                 LastName: request.LastName,
                 Password: request.Password
-            ));
+            ), cancellationToken);
             return result;
         }
     }

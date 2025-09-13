@@ -1,5 +1,4 @@
-﻿
-using Application.Auth.DTOs;
+﻿using Application.Auth.DTOs;
 using Application.Common.Models;
 
 namespace Application.Common.Interfaces
@@ -13,8 +12,8 @@ namespace Application.Common.Interfaces
     );
     public interface IIdentityService
     {
-        Task<Result<LoginResult>> LoginAsync(string email, string password);
-        Task<Result<RegisterResult>> RegisterAsync(RegisterRequest registerRequest);
-        Task<Result> ConfirmEmailAsync(Guid userId, string token);
+        Task<Result<LoginResult>> LoginAsync(string email, string password, CancellationToken cancellation);
+        Task<Result<RegisterResult>> RegisterAsync(RegisterRequest registerRequest, CancellationToken cancellation);
+        Task<Result> ConfirmEmailAsync(Guid userId, string token, CancellationToken cancellation);
     }
 }

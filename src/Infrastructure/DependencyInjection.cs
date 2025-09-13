@@ -25,10 +25,6 @@ namespace Infrastructure
                         maxRetryDelay: TimeSpan.FromSeconds(10),
             errorNumbersToAdd: null)));
 
-            services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
-                    .AddEntityFrameworkStores<ApplicationDbContext>()
-                    .AddDefaultTokenProviders();
-
             services.AddSingleton<IBoardRepository, InMemoryBoardRepository>();
 
             services.AddAuthentication(options =>

@@ -6,6 +6,7 @@ namespace Application.Common.Interfaces
 {
     public interface IApplicationDbContext
     {
+        DbSet<ApplicationUser> Users { get; }
         DbSet<Project> Projects { get; }
         DbSet<ProjectMember> ProjectMembers { get; }
         DbSet<Board> Boards { get; }

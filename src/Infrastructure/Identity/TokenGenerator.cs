@@ -14,7 +14,7 @@ namespace Infrastructure.Identity
         {
             _configuration = configuration;
         }
-        public string GenerateToken(Guid Id, string Email, string Username, string[] Roles)
+        public string GenerateToken(Guid Id, string Email, string Username)
         {
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
             var creds = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
@@ -25,11 +25,6 @@ namespace Infrastructure.Identity
                 new Claim(ClaimTypes.Email, Email),
                 new Claim(ClaimTypes.Name, Username)
             };
-
-            foreach (string role in Roles)
-            {
-                userClaims.Add(new Claim(ClaimTypes.Role, role));
-            }
 
             var token = new JwtSecurityToken(
                     issuer: _configuration["Jwt:Issuer"],

@@ -20,14 +20,11 @@ namespace Infrastructure.Data.Configurations
                 .HasForeignKey(cm => cm.CardId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne<ApplicationUser>()
-                .WithMany()
+            builder.HasOne(cm => cm.Member)
+                .WithMany(u => u.AssignedCards)
                 .HasForeignKey(cm => cm.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
-            // Helpful index for queries
-            builder.HasIndex(cm => cm.UserId);
-            builder.HasIndex(cm => cm.CardId);
         }
     }
 }

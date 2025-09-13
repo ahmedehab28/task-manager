@@ -1,15 +1,12 @@
 ﻿using Application.Common.Interfaces;
 using Domain.Entities;
 using Domain.Entities.Common;
-using Infrastructure.Identity;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Infrastructure.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>, IApplicationDbContext
+    public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
         private readonly ICurrentUser _currentUser;
         public ApplicationDbContext(
@@ -19,6 +16,7 @@ namespace Infrastructure.Data
         {
             _currentUser = currentUser;
         }
+        public DbSet<ApplicationUser> Users => Set<ApplicationUser>();
         public DbSet<Project> Projects => Set<Project>();
         public DbSet<ProjectMember> ProjectMembers => Set<ProjectMember>();
         public DbSet<Board> Boards => Set<Board>();
@@ -28,7 +26,7 @@ namespace Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
-            base.OnModelCreating(modelBuilder); // Important for Identity schema
+            base.OnModelCreating(modelBuilder); 
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

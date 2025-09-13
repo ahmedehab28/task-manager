@@ -10,6 +10,7 @@ namespace Domain.Entities
         public DateTime JoinedAt { get; set; } = DateTime.UtcNow;
 
         public Project Project { get; private set; } = null!;
+        public ApplicationUser User { get; private set; } = null!;
 
     }
 }
