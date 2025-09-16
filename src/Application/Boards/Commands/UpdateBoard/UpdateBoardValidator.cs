@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Domain.Rules;
+using FluentValidation;
 
 namespace Application.Boards.Commands.UpdateBoard
 {
@@ -7,11 +8,14 @@ namespace Application.Boards.Commands.UpdateBoard
         public UpdateBoardValidator()
         {
             RuleFor(x => x.Title)
-                .NotEmpty().WithMessage("Title is required.")
-                .MaximumLength(50).WithMessage("Title cannot exceed 50 characters.");
+                .NotEmpty()
+                .WithMessage("Title is required.")
+                .MaximumLength(BoardRules.TitleMaxLength)
+                .WithMessage($"Title cannot exceed {BoardRules.TitleMaxLength} characters.");
 
             RuleFor(x => x.Description)
-                .MaximumLength(500).WithMessage("Description cannot exceed 500 characters.");
+                .MaximumLength(BoardRules.DescriptionMaxLength)
+                .WithMessage($"Description cannot exceed {BoardRules.DescriptionMaxLength} characters.");
         }
     }
 }
