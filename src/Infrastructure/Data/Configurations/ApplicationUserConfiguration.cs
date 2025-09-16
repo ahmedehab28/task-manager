@@ -41,6 +41,12 @@ namespace Infrastructure.Data.Configurations
 
             builder.Property(u => u.IsActive)
                 .HasDefaultValue(true);
+
+            builder.HasIndex(u => u.Email)
+                .IsUnique();
+
+            builder.HasIndex(u => u.UserName)
+                .IsUnique();
         }
     }
 }
