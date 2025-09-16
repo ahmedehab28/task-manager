@@ -11,7 +11,6 @@ namespace Domain.Entities
         public IList<Board> Boards { get; private set; } = [];
 
         public IList<ProjectMember> Members { get; private set; } = [];
-        private Project() { } // EF
 
         public static Project CreateWithDefaultInbox(string title, string? description, Guid ownerId)
         {

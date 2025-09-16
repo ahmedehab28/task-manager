@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Domain.Rules;
+using FluentValidation;
 
 namespace Application.Projects.Commands.UpdateProject
 {
@@ -8,11 +9,18 @@ namespace Application.Projects.Commands.UpdateProject
         {
             RuleFor(x => x.ProjectId)
                 .NotEmpty().WithMessage("ProjectId is required.");
+
             RuleFor(x => x.Title)
-                .NotEmpty().WithMessage("Title is required.")
-                .MaximumLength(50).WithMessage("Title must not exceed 50 characters.");
+                .Cascade(CascadeMode.Stop)
+                .NotEmpty()
+                    .When(x => x.Title != null)
+                    .WithMessage("Title cannot be empty when provided.")
+                .MaximumLength(ProjectRules.TitleMaxLength)
+                .WithMessage($"Title must not exceed {ProjectRules.TitleMaxLength} characters.");
+
             RuleFor(x => x.Description)
-                .MaximumLength(500).WithMessage("Description must not exceed 500 characters.");
+                .MaximumLength(ProjectRules.DescriptionMaxLength)
+                .WithMessage($"Description must not exceed {ProjectRules.DescriptionMaxLength} characters.");
         }
     }
 }

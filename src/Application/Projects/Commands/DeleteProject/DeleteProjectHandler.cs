@@ -26,8 +26,10 @@ namespace Application.Projects.Commands.DeleteProject
             if (!(await _authService.IsProjectOwnerAsync(request.ProjectId, userId, cancellationToken)))
                 throw new NotFoundException("You are either not authorized to delete this project or it's not found.");
 
-            var project = await _context.Projects.FindAsync(request.ProjectId, cancellationToken);
-            _context.Projects.Remove(project!);
+            var project = await _context.Projects.FindAsync(request.ProjectId, cancellationToken) 
+                ?? throw new NotFoundException("Project is not found.");
+
+            _context.Projects.Remove(project);
             await _context.SaveChangesAsync(cancellationToken);
 
         }

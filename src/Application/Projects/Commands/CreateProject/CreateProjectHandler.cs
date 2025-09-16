@@ -1,13 +1,11 @@
-﻿
-using Application.Common.Interfaces;
+﻿using Application.Common.Interfaces;
 using Application.Projects.DTOs;
 using Domain.Entities;
-using Domain.Enums;
 using MediatR;
 
 namespace Application.Projects.Commands.CreateProject
 {
-    internal class CreateProjectHandler : IRequestHandler<CreateProjectCommand, ProjectDto>
+    public class CreateProjectHandler : IRequestHandler<CreateProjectCommand, ProjectDto>
     {
         private readonly IApplicationDbContext _context;
         private readonly ICurrentUser _currentUser;

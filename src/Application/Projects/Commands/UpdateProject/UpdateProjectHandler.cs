@@ -1,5 +1,4 @@
-﻿
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authorization;
 using MediatR;
@@ -23,15 +22,18 @@ namespace Application.Projects.Commands.UpdateProject
         public async Task Handle(UpdateProjectCommand request, CancellationToken cancellationToken)
         {
             var userId = _currentUser.Id;
-            if (!(_authService.IsProjectAdminAsync(request.ProjectId, userId, cancellationToken).Result))
+            if (!(await _authService.IsProjectAdminAsync(request.ProjectId, userId, cancellationToken)))
                 throw new NotFoundException("You are either not authorized to update this project or it's not found.");
 
             var project = await _context.Projects.FindAsync(
-                new object?[] { request.ProjectId },
-                cancellationToken: cancellationToken);
+                [request.ProjectId],
+                cancellationToken: cancellationToken)
+                ?? throw new NotFoundException("Project is not found.");
 
-            project!.Title = request.Title;
-            project.Description = request.Description;
+            if (request.Title is not null)
+                project.Title = request.Title;
+            if (request.Description is not null)
+                project.Description = request.Description;
 
             await _context.SaveChangesAsync(cancellationToken);
         }

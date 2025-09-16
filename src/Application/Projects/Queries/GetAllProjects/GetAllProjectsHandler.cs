@@ -19,15 +19,17 @@ namespace Application.Projects.Queries.GetAllProjects
         public async Task<IEnumerable<ProjectDto>> Handle(GetAllProjectsQuery request, CancellationToken cancellationToken)
         {
             var userId = _currentUser.Id;
-            var projects = await _context.ProjectMembers
-                .Where(pm => pm.UserId == userId)
-                .Select(pm => new ProjectDto
-                (
-                    pm.ProjectId,
-                    pm.Project.Title,
-                    pm.Project.Description
-                ))
-                .ToListAsync(cancellationToken);
+
+            var projects = await (
+                from pm in _context.ProjectMembers
+                join p in _context.Projects on pm.ProjectId equals p.Id
+                where pm.UserId == userId
+                select new ProjectDto(
+                    p.Id,
+                    p.Title,
+                    p.Description
+                )
+            ).ToListAsync(cancellationToken);
 
             return projects;
         }
