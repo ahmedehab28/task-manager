@@ -28,7 +28,8 @@ namespace Application.Boards.Commands.DeleteBoard
             if (!(await _authService.CanAccessBoardAsync(EntityOperations.Delete, request.BoardId, userId, cancellationToken)))
                 throw new NotFoundException("You are not authorized or board is not found.");
 
-            var board = await _context.Boards.FindAsync(request.BoardId, cancellationToken);
+            var board = await _context.Boards.FindAsync([request.BoardId], cancellationToken)
+                ?? throw new NotFoundException("Board is already deleted");
 
             _context.Boards.Remove(board!);
             await _context.SaveChangesAsync(cancellationToken);

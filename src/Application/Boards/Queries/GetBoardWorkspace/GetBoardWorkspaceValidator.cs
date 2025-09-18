@@ -2,9 +2,9 @@
 
 namespace Application.Cards.Queries.GetBoardWorksoace
 {
-    public class GetBoardWorksoaceValidator : AbstractValidator<GetBoardWorkspaceQuery>
+    public class GetBoardWorkspaceValidator : AbstractValidator<GetBoardWorkspaceQuery>
     {
-        public GetBoardWorksoaceValidator()
+        public GetBoardWorkspaceValidator()
         {
             RuleFor(x => x.BoardId)
                 .NotEmpty().WithMessage("BoardId is required.");

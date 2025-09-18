@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Application.Boards.Commands.UpdateBoard
 {
-    internal class UpdateBoardHandler : IRequestHandler<UpdateBoardCommand>
+    public class UpdateBoardHandler : IRequestHandler<UpdateBoardCommand>
     {
         private readonly IApplicationDbContext _context;
         private readonly ICurrentUser _currentUser;
@@ -29,10 +29,13 @@ namespace Application.Boards.Commands.UpdateBoard
             if (!(await _authService.CanAccessBoardAsync(EntityOperations.Update, request.BoardId, userId, cancellationToken)))
                 throw new NotFoundException("You are not authorized or board is not found.");
 
-            var board = await _context.Boards.FindAsync(request.BoardId, cancellationToken);
+            var board = await _context.Boards.FindAsync([request.BoardId], cancellationToken)
+                ?? throw new NotFoundException("Board is not found.");
 
-            board!.Title = request.Title;
-            board.Description = request.Description;
+            if (request.Title is not null)
+                board.Title = request.Title;
+            if (request.Description is not null)
+                board.Description = request.Description;
 
             await _context.SaveChangesAsync(cancellationToken);
         }

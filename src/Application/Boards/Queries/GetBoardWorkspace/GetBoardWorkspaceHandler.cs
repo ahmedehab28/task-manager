@@ -29,27 +29,29 @@ namespace Application.Cards.Queries.GetBoardWorksoace
             if (!(await _authService.CanAccessBoardAsync(EntityOperations.View, request.BoardId, userId, cancellationToken)))
                 throw new NotFoundException("You are not authorized or resourse is not found.");
 
-            var cardLists = await _context.CardLists
-                .AsNoTracking()
-                .Where(cl => cl.BoardId == request.BoardId)
-                .OrderBy(cl => cl.Position)
-                .Select(cl => new BoardListsDto(
+            var cardLists = await (
+                from cl in _context.CardLists
+                where cl.BoardId == request.BoardId
+                orderby cl.Position
+                join c in _context.Cards on cl.Id equals c.CardListId into cards
+                select new BoardListsDto(
                     cl.Id,
                     cl.BoardId,
                     cl.Title,
                     cl.Position,
-                    cl.Cards
+                    cards
                         .OrderBy(c => c.Position)
                         .Select(c => new BoardCardsDto(
-                            c.Id,
-                            cl.BoardId,
-                            c.CardListId,
-                            c.Title,
-                            c.Description,
-                            c.DueAt,
-                            c.Position))
-                        .ToList()))
-                .ToListAsync(cancellationToken);
+                                c.Id,
+                                cl.BoardId,
+                                c.CardListId,
+                                c.Title,
+                                c.Description,
+                                c.DueAt,
+                                c.Position
+                            )).ToList()
+                    )
+                ).ToListAsync(cancellationToken);
 
             return new BoardDto(
                 request.BoardId,

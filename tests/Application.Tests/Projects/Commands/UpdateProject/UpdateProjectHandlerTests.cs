@@ -79,6 +79,7 @@ namespace Application.Tests.Projects.Commands.UpdateProject
             string oldDesc = "Old Description";
             var project = new Project
             {
+                Id = projectId,
                 Title = oldTitle,
                 Description = oldDesc
             };
@@ -99,6 +100,7 @@ namespace Application.Tests.Projects.Commands.UpdateProject
             await _handler.Handle(cmd, CancellationToken.None);
 
             // Assert
+            project.Id.Should().Be(projectId);
             project.Title.Should().Be(newTitle);
             project.Description.Should().Be(newDesc);
 

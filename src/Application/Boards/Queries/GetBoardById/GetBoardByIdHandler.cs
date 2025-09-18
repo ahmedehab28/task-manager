@@ -28,16 +28,10 @@ namespace Application.Boards.Queries.GetBoardById
             if (!(await _authService.CanAccessBoardAsync(EntityOperations.View, request.BoardId, userId, cancellationToken)))
                 throw new NotFoundException("You are not authorized or board is not found.");
 
-            var board = await _context.Boards
-                .Where(b => b.Id == request.BoardId)
-                .Select(b => new BoardDetailsDto(
-                    b.Id,
-                    b.ProjectId,
-                    b.Title,
-                    b.Description))
-                .FirstOrDefaultAsync(cancellationToken);
+            var board = await _context.Boards.FindAsync([request.BoardId], cancellationToken)
+                ?? throw new NotFoundException("Board is not found.");
 
-            return board!;
+            return new BoardDetailsDto(board.Id, board.ProjectId, board.Title, board.Description);
         }
     }
 }

@@ -1,12 +1,12 @@
-﻿using Application.Boards.Commands.CreateBoard;
+﻿using Application.Boards.Commands.UpdateBoard;
 using Domain.Rules;
 using FluentValidation.TestHelper;
 
-namespace Application.Tests.Boards.Commands.CreateBoard
+namespace Application.Tests.Boards.Commands.UpdateBoard
 {
-    public class CreateBoardValidatorTests
+    public class UpdateBoardValidatorTests
     {
-        private readonly CreateBoardValidator _validator = new();
+        private readonly UpdateBoardValidator _validator = new();
 
         [Theory]
         [InlineData("1")]
@@ -17,50 +17,48 @@ namespace Application.Tests.Boards.Commands.CreateBoard
         public void Validator_Should_PassValidation_When_TitleIsValid(string title)
         {
             // Arrange
-            var cmd = new CreateBoardCommand(Guid.NewGuid(), title, "Description");
+            var cmd = new UpdateBoardCommand(Guid.NewGuid(), title, "Description");
 
             // Act
             var result = _validator.TestValidate(cmd);
 
             // Assertion
-            result.ShouldNotHaveValidationErrorFor(b => b.Title);
+            result.ShouldNotHaveAnyValidationErrors();
         }
 
         [Fact]
-        public void Validator_Should_PassValidation_When_ProjectIdIsValid()
+        public void Validator_Should_PassValidation_When_NonKeyBoardFieldsAreNull()
         {
             // Arrange
-            var cmd = new CreateBoardCommand(Guid.NewGuid(), "Title", "Description");
+            var cmd = new UpdateBoardCommand(Guid.NewGuid(), null, null);
 
             // Act
             var result = _validator.TestValidate(cmd);
 
             // Assert
-            result.ShouldNotHaveValidationErrorFor(b => b.ProjectId);
-
+            result.ShouldNotHaveAnyValidationErrors();
         }
 
         [Fact]
-        public void Validator_Should_HaveValidationErrors_When_ProjectIdIsEmpty()
+        public void Validator_Should_HaveValidationErrors_When_BoardIdIsEmpty()
         {
             // Arrange
-            var cmd = new CreateBoardCommand(Guid.Empty, "Valid title", null);
+            var cmd = new UpdateBoardCommand(Guid.Empty, "Title", "Description");
 
             // Act
             var result = _validator.TestValidate(cmd);
 
             // Assert
-            result.ShouldHaveValidationErrorFor(c => c.ProjectId);
+            result.ShouldHaveValidationErrorFor(c => c.BoardId);
         }
 
         [Theory]
-        [InlineData(null)]
         [InlineData("")]
         [InlineData("  ")]
         public void Validtaor_Should_HaveValidationErrors_When_TitleIsInvalid(string? title)
         {
             // Arrange
-            var cmd = new CreateBoardCommand(Guid.NewGuid(),title!, "Board Description");
+            var cmd = new UpdateBoardCommand(Guid.NewGuid(), title!, "Description");
 
             // Act
             var result = _validator.TestValidate(cmd);
@@ -70,13 +68,11 @@ namespace Application.Tests.Boards.Commands.CreateBoard
 
         }
 
-        
-
         [Fact]
-        public void CreateBoardValidator_Should_HaveValidationErrors_When_TitleIsTooLong()
+        public void Validator_Should_HaveValidationErrors_When_TitleIsTooLong()
         {
             // Arrange
-            var cmd = new CreateBoardCommand(Guid.NewGuid(), new string('A', BoardRules.TitleMaxLength + 1), null);
+            var cmd = new UpdateBoardCommand(Guid.NewGuid(), new string('A', BoardRules.TitleMaxLength + 1), null);
 
             // Act
             var result = _validator.TestValidate(cmd);
@@ -86,10 +82,10 @@ namespace Application.Tests.Boards.Commands.CreateBoard
         }
 
         [Fact]
-        public void CreateBoardValidator_Should_HaveValidationErrors_When_DescriptionIsTooLong()
+        public void Validator_Should_HaveValidationErrors_When_DescriptionIsTooLong()
         {
             // Arrange
-            var cmd = new CreateBoardCommand(Guid.NewGuid(), "Title", new string('A', BoardRules.DescriptionMaxLength + 1));
+            var cmd = new UpdateBoardCommand(Guid.NewGuid(), "Title", new string('A', BoardRules.DescriptionMaxLength + 1));
 
             // Act
             var result = _validator.TestValidate(cmd);

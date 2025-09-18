@@ -33,7 +33,8 @@ namespace Application.Boards.Queries.GetAllBoards
             var boards = await _context.Boards
                 .AsNoTracking()
                 .Where(b => b.ProjectId == request.ProjectId)
-                .OrderBy(b => b.CreatedAt)  
+                .OrderBy(b => b.CreatedAt)
+                .ThenBy(b => b.Id)
                 .Select(b => new BoardDetailsDto (b.Id, b.ProjectId, b.Title, b.Description))
                 .ToListAsync(cancellationToken);
 
