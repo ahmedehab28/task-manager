@@ -1,5 +1,5 @@
 ﻿using Application.Common.Enums;
-using Microsoft.EntityFrameworkCore;
+using Domain.Entities;
 
 namespace Application.Common.Interfaces.Authorization
 {
@@ -7,7 +7,9 @@ namespace Application.Common.Interfaces.Authorization
     {
         Task<bool> CanAccessProject(EntityOperations op, Guid projectId, Guid userId, CancellationToken cancellation);
         Task<bool> CanAccessBoardAsync(EntityOperations op, Guid boardId, Guid userId, CancellationToken cancellationToken);
-        Task<bool> CanAccessListAsync(EntityOperations op, Guid listId, Guid userId, CancellationToken ct);
+        Task<Board?> GetBoardAsync(EntityOperations op, Guid boardId, Guid userId, CancellationToken cancellationToken);
+        Task<bool> CanAccessListAsync(EntityOperations op, Guid listId, Guid userId, CancellationToken cancellationToken);
+        Task<CardList?> GetListAsync(EntityOperations op, Guid listId, Guid userId, CancellationToken cancellationToken);
         Task<bool> CanAccessCardAsync(EntityOperations op, Guid cardId, Guid userId, CancellationToken cancellationToken);
     }
 }
