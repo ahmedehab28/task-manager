@@ -20,10 +20,15 @@ namespace Application.List.Commands.UpdateList
                 .WithMessage("BoardId must be a valid GUID.")
                 .When(x => x.BoardId.HasValue);
 
+            RuleFor(x => x.Position)
+                .NotNull()
+                .When(x => x.BoardId.HasValue)
+                .WithMessage("Position is required when moving a list to another board.");
+
             RuleFor(cmd => cmd.Position)
-             .GreaterThanOrEqualTo(0m).WithMessage("Position must be zero or positive.")
-             .PrecisionScale(18, 4, false).WithMessage("Position can have up to 4 decimal places and no more than 18 digits total.")
-             .When(x => x.Position.HasValue); ;
+                .GreaterThanOrEqualTo(0m).WithMessage("Position must be zero or positive.")
+                .PrecisionScale(18, 4, false).WithMessage("Position can have up to 4 decimal places and no more than 18 digits total.")
+                .When(x => x.Position.HasValue); ;
         }
     }
 }

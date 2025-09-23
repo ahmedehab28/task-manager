@@ -24,11 +24,9 @@ namespace Application.Cards.Commands.DeleteCard
         public async Task Handle(DeleteCardCommand request, CancellationToken cancellationToken)
         {
             var userId = _currentUser.Id;
-            if (!(await _authService.CanAccessCardAsync(EntityOperations.Delete, request.CardId, userId, cancellationToken)))
-                throw new KeyNotFoundException("You are not authorized or project/board/card is not found.");
+            var card = await _authService.GetCardAsync(EntityOperations.Delete, request.CardId, userId, cancellationToken)
+                ?? throw new KeyNotFoundException("You are not authorized or project/board/card is not found.");
 
-            var card = await _context.Cards.FindAsync(new object?[] { request.CardId }, cancellationToken);
-            
             _context.Cards.Remove(card!);
             await _context.SaveChangesAsync(cancellationToken);
         }

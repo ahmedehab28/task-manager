@@ -4,9 +4,7 @@ using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authorization;
 using Application.List.DTOs;
 using Domain.Entities;
-using Domain.Enums;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.List.Commands.CreateList
 {

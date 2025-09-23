@@ -3,9 +3,7 @@ using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authorization;
 using Application.List.DTOs;
-using Domain.Enums;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.List.Commands.UpdateList
 {
@@ -29,24 +27,20 @@ namespace Application.List.Commands.UpdateList
         {
             var userId = _currentUser.Id;
 
-            if (!(await _authService.CanAccessListAsync(EntityOperations.Update, request.ListId, userId, cancellationToken)))
-                throw new NotFoundException("You are not authorized or List is not found.");
-            var list = (await _context.CardLists
-                .Include(cl => cl.Board)
-                .Where(cl => cl.Id == request.ListId)
-                .FirstOrDefaultAsync(cancellationToken))!;
+            var list = await _authService.GetListAsync(EntityOperations.Update, request.ListId, userId, cancellationToken)
+                ?? throw new NotFoundException("You are not authorized or List is not found.");
 
             if (request.Title != null)
                 list.Title = request.Title;
-            if (request.Position != null && !request.BoardId.HasValue)
-                list.Position = request.Position.Value;
-            if (request.Position != null && request.BoardId.HasValue)
+            if (request.Position != null)
             {
-                if (!(await _authService.CanAccessBoardAsync(EntityOperations.Update, request.BoardId.Value, userId, cancellationToken)) ||
-                    list.Board.BoardType == BoardType.Inbox)
-                    throw new NotFoundException("You are not authorized or Board is not found.");
-                list.BoardId = request.BoardId.Value;
                 list.Position = request.Position.Value;
+                if (request.BoardId.HasValue)
+                {
+                    if(!(await _authService.CanAccessBoardAsync(EntityOperations.Update, request.BoardId.Value, userId, cancellationToken)))
+                        throw new NotFoundException("You are not authorized or Target Board is not found.");
+                    list.BoardId = request.BoardId.Value;
+                }
             }
 
             await _context.SaveChangesAsync(cancellationToken);
@@ -55,7 +49,6 @@ namespace Application.List.Commands.UpdateList
                 list.BoardId,
                 list.Title,
                 list.Position);
-
         }
     }
 }

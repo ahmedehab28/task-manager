@@ -23,10 +23,9 @@ namespace Application.List.Commands.DeleteList
         public async Task Handle(DeleteListCommand request, CancellationToken cancellationToken)
         {
             var userId = _currentUser.Id;
-            if (!await (_authService.CanAccessListAsync(EntityOperations.Delete, request.ListId, userId, cancellationToken)))
-                throw new NotFoundException("You are not authorized or list is not found.");
+            var list = await _authService.GetListAsync(EntityOperations.Delete, request.ListId, userId, cancellationToken)
+                ?? throw new NotFoundException("You are not authorized or list is not found.");
 
-            var list = (await _context.CardLists.FindAsync(new object[] { request.ListId }, cancellationToken))!;
             _context.CardLists.Remove(list);
             await _context.SaveChangesAsync(cancellationToken);
         }

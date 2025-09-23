@@ -26,13 +26,8 @@ namespace Application.List.Queries.GetListById
         {
             var userId = _currentUser.Id;
 
-            if (!(await _authService.CanAccessListAsync(EntityOperations.View, request.ListId, userId, cancellationToken)))
-                throw new NotFoundException("You are not authorized or card is not found.");
-            
-            var list = (await _context.CardLists
-                .AsNoTracking()
-                .Where(cl => cl.Id == request.ListId)
-                .FirstOrDefaultAsync(cancellationToken))!;
+            var list = await _authService.GetListAsync(EntityOperations.View, request.ListId, userId, cancellationToken)
+                ?? throw new NotFoundException("You are not authorized or card is not found.");
 
             return new ListDto(
                 list.Id,
