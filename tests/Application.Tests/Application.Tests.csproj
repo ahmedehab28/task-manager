@@ -27,7 +27,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Boards\DTOs\" />
+	  <Folder Include="Cards\Queries\" />
 	</ItemGroup>
 
 </Project>
