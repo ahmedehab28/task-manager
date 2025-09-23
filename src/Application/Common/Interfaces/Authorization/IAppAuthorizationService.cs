@@ -11,5 +11,6 @@ namespace Application.Common.Interfaces.Authorization
         Task<bool> CanAccessListAsync(EntityOperations op, Guid listId, Guid userId, CancellationToken cancellationToken);
         Task<CardList?> GetListAsync(EntityOperations op, Guid listId, Guid userId, CancellationToken cancellationToken);
         Task<bool> CanAccessCardAsync(EntityOperations op, Guid cardId, Guid userId, CancellationToken cancellationToken);
+        Task<Card?> GetCardAsync(EntityOperations op, Guid cardId, Guid userId, CancellationToken cancellationToken);
     }
 }
