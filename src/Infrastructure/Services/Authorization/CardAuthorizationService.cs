@@ -1,9 +1,8 @@
 ﻿using Application.Common.Enums;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authorization;
-using Domain.Entities;
+using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Services.Authorization
 {
@@ -20,17 +19,16 @@ namespace Infrastructure.Services.Authorization
             _appAuthService = appAuthService;
         }
 
-        public async Task<bool> CanMoveCardAsync(Guid listId, Guid cardId, Guid userId, CancellationToken cancellation)
+        public async Task<bool> CanAssignMembersToCardAsync(Guid cardId, Guid userId, CancellationToken cancellation)
         {
-            var canAccessCard = _context.Cards
-                    .AnyAsync(c =>
-                        c.Id == cardId &&
-                        c.CardList.Board.Project.Members.Any(pm => pm.UserId == userId));
-
-            var canAccessList = _appAuthService.CanAccessListAsync(EntityOperations.Update, listId, userId, cancellation);
-
-            await Task.WhenAll(canAccessCard, canAccessList);
-            return canAccessCard.Result && canAccessList.Result;
+            return await _context.ProjectMembers
+                .AnyAsync(pm => 
+                    pm.UserId == userId &&
+                    (pm.Role == ProjectRole.Admin || pm.Role == ProjectRole.Owner) &&
+                    pm.Project.Boards.Any(b => 
+                        b.CardLists.Any(cl =>
+                            cl.Cards.Any(c => c.Id == cardId))),
+                    cancellation);
         }
       
 

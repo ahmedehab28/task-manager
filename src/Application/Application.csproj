@@ -17,7 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Cards\Commands\AssignMember\" />
+    <Folder Include="CardMembers\Commands\DeleteCardMember\" />
+    <Folder Include="CardMembers\DTOs\" />
+    <Folder Include="CardMembers\Queries\" />
     <Folder Include="Cards\Queries\GetProjectCards\" />
     <Folder Include="Cards\Queries\GetAssignedCards\" />
     <Folder Include="Projects\DTOs\ProjectMember\" />

@@ -28,7 +28,7 @@ namespace Application.List.Commands.UpdateList
             RuleFor(cmd => cmd.Position)
                 .GreaterThanOrEqualTo(0m).WithMessage("Position must be zero or positive.")
                 .PrecisionScale(18, 4, false).WithMessage("Position can have up to 4 decimal places and no more than 18 digits total.")
-                .When(x => x.Position.HasValue); ;
+                .When(x => x.Position.HasValue);
         }
     }
 }

@@ -1,38 +1,36 @@
-﻿using Application.Common.Enums;
+﻿using Application.Cards.Commands.DeleteCard;
+using Application.Common.Enums;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authorization;
-using Application.List.Commands.DeleteList;
 using Domain.Entities;
 using FluentAssertions;
 using Moq;
 
-namespace Application.Tests.Lists.Commands.DeleteList
+namespace Application.Tests.Cards.Commands.DeleteCard
 {
-    public class DeleteListHandlerTests
+    public class DeleteCardHandlerTests
     {
         private readonly Mock<IApplicationDbContext> _context = new();
         private readonly Mock<ICurrentUser> _currentUser = new();
         private readonly Mock<IAppAuthorizationService> _authService = new();
-        private readonly DeleteListHandler _handler;
-
-        public DeleteListHandlerTests()
+        private readonly DeleteCardHandler _handler;
+        public DeleteCardHandlerTests()
         {
-            _handler = new DeleteListHandler(_context.Object, _currentUser.Object, _authService.Object);
+            _handler = new DeleteCardHandler(_context.Object, _currentUser.Object, _authService.Object);
             _currentUser
                 .Setup(x => x.Id)
                 .Returns(It.IsAny<Guid>());
         }
-
         [Fact]
-        public async Task Handler_Should_ThrowNotFoundException_When_User_CannotAccessList()
+        public async Task Handler_Should_ThrowNotFoundException_When_User_CannotAccessCard()
         {
             // Arrange
             _authService
-                .Setup(x => x.GetListAsync(It.IsAny<EntityOperations>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync((CardList?) null);
+                .Setup(x => x.GetCardAsync(It.IsAny<EntityOperations>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((Card?)null);
 
-            var cmd = new DeleteListCommand(Guid.NewGuid());
+            var cmd = new DeleteCardCommand(Guid.NewGuid());
 
             // Act & Assert
             await FluentActions.Invoking(() => _handler.Handle(cmd, CancellationToken.None))
@@ -41,53 +39,53 @@ namespace Application.Tests.Lists.Commands.DeleteList
 
             _authService
                 .Verify(x =>
-                    x.GetListAsync(
+                    x.GetCardAsync(
                         It.IsAny<EntityOperations>(),
                         It.IsAny<Guid>(),
                         It.IsAny<Guid>(),
                         It.IsAny<CancellationToken>()), Times.Once);
 
-            _context.Verify(x => x.CardLists.Remove(It.IsAny<CardList>()), Times.Never);
+            _context.Verify(x => x.Cards.Remove(It.IsAny<Card>()), Times.Never);
             _context.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Fact]
-        public async Task Handler_Should_DeleteList_When_User_CanAcessList()
+        public async Task Handler_Should_DeleteCard_When_User_CanAcessCard()
         {
             // Arrange
-            Guid listId = Guid.NewGuid();
+            Guid cardId = Guid.NewGuid();
 
-            CardList fakeList = new();
+            Card fakeCard = new();
 
             _authService
-                .Setup(x => x.GetListAsync(It.IsAny<EntityOperations>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(fakeList);
+                .Setup(x => x.GetCardAsync(It.IsAny<EntityOperations>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(fakeCard);
 
-            CardList deletedList = null!;
+            Card deletedCard = null!;
             _context
-                .Setup(x => x.CardLists.Remove(It.IsAny<CardList>()))
-                .Callback<CardList>(l => deletedList = l);
+                .Setup(x => x.Cards.Remove(It.IsAny<Card>()))
+                .Callback<Card>(c => deletedCard = c);
 
             _context
                 .Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(1);
 
-            var cmd = new DeleteListCommand(Guid.NewGuid());
+            var cmd = new DeleteCardCommand(Guid.NewGuid());
 
             // Act
             await _handler.Handle(cmd, CancellationToken.None);
 
             // Assert
-            deletedList.Should().BeSameAs(fakeList);
+            deletedCard.Should().BeSameAs(fakeCard);
 
             _authService
                 .Verify(x =>
-                    x.GetListAsync(
+                    x.GetCardAsync(
                         It.IsAny<EntityOperations>(),
                         It.IsAny<Guid>(),
                         It.IsAny<Guid>(),
                         It.IsAny<CancellationToken>()), Times.Once);
-            _context.Verify(x => x.CardLists.Remove(It.IsAny<CardList>()), Times.Once);
+            _context.Verify(x => x.Cards.Remove(It.IsAny<Card>()), Times.Once);
             _context.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
     }

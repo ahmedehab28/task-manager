@@ -5,6 +5,7 @@ using Asp.Versioning.ApiExplorer;
 using Infrastructure;
 using Serilog;
 using WebApi.Middleware;
+using WebApi.Serialization;
 using WebApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,8 +29,11 @@ versioningBuilder.AddApiExplorer(setup =>
 builder.Services.AddControllers(options =>
     {
         options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
-    }
-);
+    })
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new OptionalJsonConverterFactory());
+    });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

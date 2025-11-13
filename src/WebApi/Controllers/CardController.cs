@@ -1,6 +1,5 @@
 ﻿using Application.Cards.Commands.CreateCard;
 using Application.Cards.Commands.DeleteCard;
-using Application.Cards.Commands.MoveCard;
 using Application.Cards.Commands.UpdateCard;
 using Application.Cards.DTOs;
 using Application.Cards.Queries.GetCardById;
@@ -46,25 +45,17 @@ namespace WebApi.Controllers
 
         [HttpPut("{cardId:guid}")]
         [ProducesResponseType(typeof(CardDetailsDto), StatusCodes.Status200OK)]
-        public async Task<IActionResult> UpdateCardDetails([FromRoute] Guid cardId, UpdateCardDetailsRequest request)
+        public async Task<IActionResult> UpdateCard([FromRoute] Guid cardId, UpdateCardRequest request)
         {
-            var result = await _mediator.Send(new UpdateCardDetailsCommand(cardId, request.Title, request.Description, request.DueAt));
+            var result = await _mediator.Send(new UpdateCardCommand(cardId, request.Title, request.Description, request.DueAt, request.TargetListId, request.Position));
             return Ok(result);
-        }
-
-        [HttpPatch("{cardId:guid}/move")]
-        [ProducesResponseType(typeof(CardDetailsDto), StatusCodes.Status200OK)]
-        public async Task<IActionResult> MoveCard([FromRoute] Guid cardId, MoveCardRequest request)
-        {
-            var card = await _mediator.Send(new MoveCardCommand(cardId, request.ListId, request.Position));
-            return Ok(card);
         }
 
         [HttpDelete("{cardId:guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> DeleteCard([FromRoute] Guid projectId, [FromRoute] Guid boardId, [FromRoute] Guid cardId)
+        public async Task<IActionResult> DeleteCard([FromRoute] Guid cardId)
         {
-            await _mediator.Send(new DeleteCardCommand(projectId, boardId, cardId));
+            await _mediator.Send(new DeleteCardCommand(cardId));
             return NoContent();
 
         }

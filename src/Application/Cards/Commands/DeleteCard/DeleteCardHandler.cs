@@ -1,4 +1,5 @@
 ﻿using Application.Common.Enums;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authorization;
 using MediatR;
@@ -25,9 +26,9 @@ namespace Application.Cards.Commands.DeleteCard
         {
             var userId = _currentUser.Id;
             var card = await _authService.GetCardAsync(EntityOperations.Delete, request.CardId, userId, cancellationToken)
-                ?? throw new KeyNotFoundException("You are not authorized or project/board/card is not found.");
+                ?? throw new NotFoundException("You are not authorized or board is not found.");
 
-            _context.Cards.Remove(card!);
+            _context.Cards.Remove(card);
             await _context.SaveChangesAsync(cancellationToken);
         }
     }

@@ -1,5 +1,4 @@
-﻿using Application.List.Commands.CreateList;
-using Application.List.Commands.UpdateList;
+﻿using Application.List.Commands.UpdateList;
 using FluentValidation.TestHelper;
 using System.Globalization;
 namespace Application.Tests.Lists.Commands.UpdateList
